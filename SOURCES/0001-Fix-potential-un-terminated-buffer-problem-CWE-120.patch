@@ -1,0 +1,42 @@
+From b78ede45a294b567d27d7198ff3354df86a5b7f1 Mon Sep 17 00:00:00 2001
+From: Lumir Balhar <lbalhar@redhat.com>
+Date: Tue, 11 Sep 2018 15:58:31 +0200
+Subject: [PATCH 1/2] Fix potential un-terminated buffer problem (CWE-120)
+
+---
+ src/libImaging/Histo.c   | 4 +++-
+ src/libImaging/Palette.c | 3 ++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/src/libImaging/Histo.c b/src/libImaging/Histo.c
+index 0bfc8dfe..2b35873e 100644
+--- a/src/libImaging/Histo.c
++++ b/src/libImaging/Histo.c
+@@ -41,7 +41,9 @@ ImagingHistogramNew(Imaging im)
+ 
+     /* Create histogram descriptor */
+     h = calloc(1, sizeof(struct ImagingHistogramInstance));
+-    strncpy(h->mode, im->mode, IMAGING_MODE_LENGTH);
++    strncpy(h->mode, im->mode, IMAGING_MODE_LENGTH-1);
++    h->mode[IMAGING_MODE_LENGTH-1] = 0;
++
+     h->bands = im->bands;
+     h->histogram = calloc(im->pixelsize, 256 * sizeof(long));
+ 
+diff --git a/src/libImaging/Palette.c b/src/libImaging/Palette.c
+index 31c2c024..7aee6e8e 100644
+--- a/src/libImaging/Palette.c
++++ b/src/libImaging/Palette.c
+@@ -37,7 +37,8 @@ ImagingPaletteNew(const char* mode)
+     if (!palette)
+         return (ImagingPalette) ImagingError_MemoryError();
+ 
+-    strncpy(palette->mode, mode, IMAGING_MODE_LENGTH);
++    strncpy(palette->mode, mode, IMAGING_MODE_LENGTH-1);
++    palette->mode[IMAGING_MODE_LENGTH-1] = 0;
+ 
+     /* Initialize to ramp */
+     for (i = 0; i < 256; i++) {
+-- 
+2.17.1
+
