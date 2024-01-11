@@ -1,0 +1,50 @@
+From e705cd1476f04a918aae34f638b502116cb12eba Mon Sep 17 00:00:00 2001
+From: Jon Dufresne <jon.dufresne@gmail.com>
+Date: Tue, 3 Apr 2018 20:36:09 -0700
+Subject: [PATCH] Fix dereferencing type-punned pointer will break
+ strict-aliasing
+
+Compiler warning appeared as:
+
+src/path.c:574:22: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
+                      Py_TYPE(&item)->tp_name);
+                      ^~~~~~~
+
+As item is already of type PyObject*, and the Py_TYPE macro is
+equivalent to (((PyObject*)(o))->ob_type), no need for the dereference.
+
+https://docs.python.org/3/c-api/structures.html#c.Py_TYPE
+---
+ Tests/test_imagepath.py | 5 +++++
+ src/path.c              | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/Tests/test_imagepath.py b/Tests/test_imagepath.py
+index 14cc4d14b..98a6d3416 100644
+--- a/Tests/test_imagepath.py
++++ b/Tests/test_imagepath.py
+@@ -17,6 +17,11 @@ def test_path(self):
+         self.assertEqual(p[0], (0.0, 1.0))
+         self.assertEqual(p[-1], (8.0, 9.0))
+         self.assertEqual(list(p[:1]), [(0.0, 1.0)])
++        with self.assertRaises(TypeError) as cm:
++            p['foo']
++        self.assertEqual(
++            str(cm.exception),
++            "Path indices must be integers, not str")
+         self.assertEqual(
+             list(p),
+             [(0.0, 1.0), (2.0, 3.0), (4.0, 5.0), (6.0, 7.0), (8.0, 9.0)])
+diff --git a/src/path.c b/src/path.c
+index b56ea838e..d1c18c8ed 100644
+--- a/src/path.c
++++ b/src/path.c
+@@ -571,7 +571,7 @@ path_subscript(PyPathObject* self, PyObject* item) {
+     else {
+         PyErr_Format(PyExc_TypeError,
+                      "Path indices must be integers, not %.200s",
+-                     Py_TYPE(&item)->tp_name);
++                     Py_TYPE(item)->tp_name);
+         return NULL;
+     }
+ }
