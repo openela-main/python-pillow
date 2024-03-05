@@ -8,7 +8,7 @@
 
 Name:           python-%{srcname}
 Version:        5.1.1
-Release:        18%{?dist}
+Release:        18%{?dist}.1
 Summary:        Python image processing library
 
 # License: see http://www.pythonware.com/products/pil/license.htm
@@ -113,6 +113,10 @@ Patch19:        CVE-2022-22817.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2042511
 # https://bugzilla.redhat.com/show_bug.cgi?id=2042522
 Patch20:        CVE-2022-22815_CVE-2022-22816.patch
+# CVE-2023-50447 python-pillow: pillow:Arbitrary Code Execution via the environment parameter
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/02c6183d41c68a8dd080f5739f566bd82485822d
+# Patch rebased and tests converted from pytest to unittests.
+Patch21:        CVE-2023-50447.patch
 
 BuildRequires:  freetype-devel
 BuildRequires:  gcc
@@ -257,10 +261,14 @@ popd
 
 
 %changelog
+* Thu Jan 25 2024 Lumír Balhar <lbalhar@redhat.com> - 5.1.1-18.1
+- Security fix for CVE-2023-50447
+Resolves: RHEL-22591
+
 * Fri Feb 11 2022 Charalampos Stratakis <cstratak@redhat.com> - 5.1.1-18
 - Fixup for CVE-2022-22817
 - Security fixes for CVE-2022-22815, CVE-2022-22816
-Resolves: rhbz#2042522
+Resolves: rhbz#2042511, rhbz#2042522
 
 * Fri Feb 04 2022 Charalampos Stratakis <cstratak@redhat.com> - 5.1.1-17
 - Fix for CVE-2022-22817
