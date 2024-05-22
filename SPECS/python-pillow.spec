@@ -8,7 +8,7 @@
 
 Name:           python-%{srcname}
 Version:        5.1.1
-Release:        18%{?dist}.1
+Release:        20%{?dist}
 Summary:        Python image processing library
 
 # License: see http://www.pythonware.com/products/pil/license.htm
@@ -113,10 +113,14 @@ Patch19:        CVE-2022-22817.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2042511
 # https://bugzilla.redhat.com/show_bug.cgi?id=2042522
 Patch20:        CVE-2022-22815_CVE-2022-22816.patch
+# CVE-2023-44271 python-pillow: uncontrolled resource consumption when textlength
+# in an ImageDraw instance operates on a long text argument
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/1fe1bb49c452b0318cad12ea9d97c3bef188e9a7
+Patch21:        CVE-2023-44271.patch
 # CVE-2023-50447 python-pillow: pillow:Arbitrary Code Execution via the environment parameter
 # Upstream fix: https://github.com/python-pillow/Pillow/commit/02c6183d41c68a8dd080f5739f566bd82485822d
 # Patch rebased and tests converted from pytest to unittests.
-Patch21:        CVE-2023-50447.patch
+Patch22:        CVE-2023-50447.patch
 
 BuildRequires:  freetype-devel
 BuildRequires:  gcc
@@ -261,9 +265,13 @@ popd
 
 
 %changelog
-* Thu Jan 25 2024 Lumír Balhar <lbalhar@redhat.com> - 5.1.1-18.1
+* Thu Jan 25 2024 Lumír Balhar <lbalhar@redhat.com> - 5.1.1-20
 - Security fix for CVE-2023-50447
-Resolves: RHEL-22591
+Resolves: RHEL-22240
+
+* Fri Nov 10 2023 Lumír Balhar <lbalhar@redhat.com> - 5.1.1-19
+- Security fix for CVE-2023-44271
+Resolves: RHEL-15460
 
 * Fri Feb 11 2022 Charalampos Stratakis <cstratak@redhat.com> - 5.1.1-18
 - Fixup for CVE-2022-22817
