@@ -8,7 +8,7 @@
 
 Name:           python-%{srcname}
 Version:        5.1.1
-Release:        20%{?dist}
+Release:        21%{?dist}
 Summary:        Python image processing library
 
 # License: see http://www.pythonware.com/products/pil/license.htm
@@ -121,6 +121,10 @@ Patch21:        CVE-2023-44271.patch
 # Upstream fix: https://github.com/python-pillow/Pillow/commit/02c6183d41c68a8dd080f5739f566bd82485822d
 # Patch rebased and tests converted from pytest to unittests.
 Patch22:        CVE-2023-50447.patch
+# CVE-2024-28219 python-pillow: buffer overflow in _imagingcms.c
+# Upstream fix: https://github.com/python-pillow/Pillow/pull/7928
+# Patch rebased. The test requires a binary file and therefore isn't backported.
+Patch23:        CVE-2024-28219.patch
 
 BuildRequires:  freetype-devel
 BuildRequires:  gcc
@@ -265,6 +269,10 @@ popd
 
 
 %changelog
+* Thu Apr 04 2024 Lumír Balhar <lbalhar@redhat.com> - 5.1.1-21
+- Security fix for CVE-2024-28219
+Resolves: RHEL-31071
+
 * Thu Jan 25 2024 Lumír Balhar <lbalhar@redhat.com> - 5.1.1-20
 - Security fix for CVE-2023-50447
 Resolves: RHEL-22240
