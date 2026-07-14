@@ -8,7 +8,7 @@
 
 Name:           python-%{srcname}
 Version:        5.1.1
-Release:        21%{?dist}
+Release:        22%{?dist}
 Summary:        Python image processing library
 
 # License: see http://www.pythonware.com/products/pil/license.htm
@@ -125,6 +125,14 @@ Patch22:        CVE-2023-50447.patch
 # Upstream fix: https://github.com/python-pillow/Pillow/pull/7928
 # Patch rebased. The test requires a binary file and therefore isn't backported.
 Patch23:        CVE-2024-28219.patch
+# CVE-2026-54059 python-pillow: uncontrolled memory allocation in PcfFontFile._load_bitmaps()
+# CVE-2026-54060 python-pillow: uncontrolled memory allocation in FontFile.compile()
+# CVE-2026-55379 python-pillow: uncontrolled memory allocation in BdfFontFile bdf_char()
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/0a263e6264aa5399988d9acd3bbfbca2ca3ec77d
+Patch24:        CVE-2026-54059_54060_55379.patch
+# CVE-2026-55380 python-pillow: uncontrolled memory allocation in GdImageFile
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/f39b0ae6624eb2d7c5c5d651d9bb5fdbd96a8675
+Patch25:        CVE-2026-55380.patch
 
 BuildRequires:  freetype-devel
 BuildRequires:  gcc
@@ -269,6 +277,10 @@ popd
 
 
 %changelog
+* Wed Jul 08 2026 Lumír Balhar <lbalhar@redhat.com> - 5.1.1-22
+- Security fix for CVE-2026-54059, CVE-2026-54060, CVE-2026-55379, CVE-2026-55380
+Resolves: RHEL-192830, RHEL-192770, RHEL-192684, RHEL-192731
+
 * Thu Apr 04 2024 Lumír Balhar <lbalhar@redhat.com> - 5.1.1-21
 - Security fix for CVE-2024-28219
 Resolves: RHEL-31071
