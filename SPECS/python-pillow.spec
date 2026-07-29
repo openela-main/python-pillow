@@ -8,7 +8,7 @@
 
 Name:           python-%{srcname}
 Version:        5.1.1
-Release:        22%{?dist}
+Release:        23%{?dist}
 Summary:        Python image processing library
 
 # License: see http://www.pythonware.com/products/pil/license.htm
@@ -133,6 +133,14 @@ Patch24:        CVE-2026-54059_54060_55379.patch
 # CVE-2026-55380 python-pillow: uncontrolled memory allocation in GdImageFile
 # Upstream fix: https://github.com/python-pillow/Pillow/commit/f39b0ae6624eb2d7c5c5d651d9bb5fdbd96a8675
 Patch25:        CVE-2026-55380.patch
+# CVE-2026-54058 python-pillow: out-of-bounds read via undersized stride when memory mapping McIdas AREA image
+# Upstream fix: https://github.com/python-pillow/Pillow/pull/9719
+Patch26:        CVE-2026-54058.patch
+# CVE-2026-59197 python-pillow: integer overflow in RankFilter leading to out-of-bounds memory access
+# Upstream fixes:
+#   https://github.com/python-pillow/Pillow/pull/9661
+#   https://github.com/python-pillow/Pillow/pull/9695
+Patch27:        CVE-2026-59197.patch
 
 BuildRequires:  freetype-devel
 BuildRequires:  gcc
@@ -277,6 +285,10 @@ popd
 
 
 %changelog
+* Mon Jul 28 2026 Lumír Balhar <lbalhar@redhat.com> - 5.1.1-23
+- Security fix for CVE-2026-54058, CVE-2026-59197
+Resolves: RHEL-211857, RHEL-211848
+
 * Wed Jul 08 2026 Lumír Balhar <lbalhar@redhat.com> - 5.1.1-22
 - Security fix for CVE-2026-54059, CVE-2026-54060, CVE-2026-55379, CVE-2026-55380
 Resolves: RHEL-192830, RHEL-192770, RHEL-192684, RHEL-192731
