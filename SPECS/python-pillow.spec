@@ -8,7 +8,7 @@
 
 Name:           python-%{srcname}
 Version:        5.1.1
-Release:        23%{?dist}
+Release:        33%{?dist}
 Summary:        Python image processing library
 
 # License: see http://www.pythonware.com/products/pil/license.htm
@@ -141,6 +141,37 @@ Patch26:        CVE-2026-54058.patch
 #   https://github.com/python-pillow/Pillow/pull/9661
 #   https://github.com/python-pillow/Pillow/pull/9695
 Patch27:        CVE-2026-59197.patch
+# CVE-2026-112405 python-pillow: out-of-bounds access in ImagingMerge when merging image32 images
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/b6ee66e8b2c2c0932bdf65f963268d9f2927ef86
+Patch28:        CVE-2026-112405.patch
+# CVE-2026-112391 python-pillow: PdfParser default max_nesting allows unlimited recursion
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/94cb11c44ff7345414da17ebfea1598a529ad9cd
+Patch29:        CVE-2026-112391.patch
+# CVE-2026-112397 python-pillow: pillow: Denial of Service via out-of-bounds memory access on zero-width images
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/18f7c0dfee93063c51db6ed0ca8c4da2999dcb64
+Patch30:        CVE-2026-112397.patch
+# CVE-2026-112392 python-pillow: handle zero dimension images in RankFilter and related filters
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/443e3130a8c11594fd0e296afad497e11e678961
+Patch31:        CVE-2026-112392.patch
+# CVE-2026-112895 python-pillow: deep PDF page tree can exhaust the call stack
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/e2ae7eacad6de68c37eb28b633a97bebacf2c5bf
+Patch32:        CVE-2026-112895.patch
+# CVE-2026-112894 python-pillow: denial of service via quadratic time PDF object ID assignment
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/f6a852555f1a1bdff7781abf25f1a3b8bd6ce6cb
+Patch33:        CVE-2026-112894.patch
+# CVE-2026-112402 python-pillow: double free after affine transform allocation failure
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/aafa6c75f7cdabb9f409a8aac7c780bea31d08d9
+Patch34:        CVE-2026-112402.patch
+# CVE-2026-112406 python-pillow: infinite loop when rewriting PDF pages
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/b3ebf20c694f2f12537a629c30229a1d5a53f777
+Patch35:        CVE-2026-112406.patch
+# CVE-2026-96640 python-pillow: infinite loop in PDF page tree and rewrite_pages
+# Builds on top of the fixes for CVE-2026-112406 (patch 35) and CVE-2026-112895 (patch 32)
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/6f0e7ee1f9c2fe227906f8a4b926e6622b702bc7
+Patch36:        CVE-2026-96640.patch
+# CVE-2026-112892 python-pillow: unbounded write in MSP decoder
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/5dcb630b9798efd91929cb873d677aeee6ed0bb3
+Patch37:        CVE-2026-112892.patch
 
 BuildRequires:  freetype-devel
 BuildRequires:  gcc
@@ -285,6 +316,53 @@ popd
 
 
 %changelog
+* Thu Oct 22 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-33
+- CVE-2026-112892 python-pillow: pillow: Denial of Service via unbounded
+  memory expansion in MSP image decoder
+Resolves: RHEL-290437
+
+* Thu Oct 22 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-32
+- CVE-2026-96640 python-pillow: pillow: Denial of Service via duplicate
+  page references in PDF files
+Resolves: RHEL-289281
+
+* Tue Oct 20 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-31
+- CVE-2026-112406 python-pillow: pillow: Denial of Service via infinite loop
+  during PDF page rewriting
+Resolves: RHEL-287839
+
+* Tue Oct 20 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-30
+- CVE-2026-112402 python-pillow: pillow: Denial of service via double free
+  during image transformation
+Resolves: RHEL-287157
+
+* Mon Oct 19 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-29
+- CVE-2026-112894 python-pillow: pillow: Denial of Service via crafted
+  multi-frame image conversion
+Resolves: RHEL-287147
+
+* Mon Oct 19 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-28
+- CVE-2026-112895 python-pillow: pillow: Denial of service via crafted PDF
+  during append operations
+Resolves: RHEL-287152
+
+* Mon Oct 19 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-27
+- CVE-2026-112392 python-pillow: pillow: Denial of Service via zero-size
+  images in rank filters
+Resolves: RHEL-287128
+
+* Mon Oct 19 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-26
+- Security fix for CVE-2026-112397
+Resolves: RHEL-287137
+
+* Mon Oct 19 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-25
+- CVE-2026-112391 python-pillow: Pillow: Denial of Service via unbounded recursion in PDF parser
+Resolves: RHEL-287109
+
+* Mon Oct 19 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-24
+- CVE-2026-112405 python-pillow: Pillow: Denial of Service via null pointer dereference in Image.merge()
+Resolves: RHEL-287123
+
 * Mon Jul 28 2026 Lumír Balhar <lbalhar@redhat.com> - 5.1.1-23
 - Security fix for CVE-2026-54058, CVE-2026-59197
 Resolves: RHEL-211857, RHEL-211848
