@@ -8,7 +8,7 @@
 
 Name:           python-%{srcname}
 Version:        5.1.1
-Release:        33%{?dist}
+Release:        36%{?dist}
 Summary:        Python image processing library
 
 # License: see http://www.pythonware.com/products/pil/license.htm
@@ -172,6 +172,15 @@ Patch36:        CVE-2026-96640.patch
 # CVE-2026-112892 python-pillow: unbounded write in MSP decoder
 # Upstream fix: https://github.com/python-pillow/Pillow/commit/5dcb630b9798efd91929cb873d677aeee6ed0bb3
 Patch37:        CVE-2026-112892.patch
+# CVE-2026-112393 python-pillow: heap buffer overflow in _tiffWriteProc when saving TIFF to BytesIO
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/11582e5ffbdceb973d5ee593f3105af5a9852b40
+Patch38:        CVE-2026-112393.patch
+# CVE-2026-112398 python-pillow: heap buffer overflow in JPEG decoder
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/242a059aedc1935097d9aa1dc3f099750467ba75
+Patch39:        CVE-2026-112398.patch
+# CVE-2026-112900 python-pillow: EPS file name not transformed to absolute path before invoking Ghostscript
+# Upstream fix: https://github.com/python-pillow/Pillow/commit/a2c363141da31a265dd536c945677db4b64f3ec9
+Patch40:        CVE-2026-112900.patch
 
 BuildRequires:  freetype-devel
 BuildRequires:  gcc
@@ -316,6 +325,20 @@ popd
 
 
 %changelog
+* Thu Oct 29 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-36
+- CVE-2026-112900 python-pillow: Pillow: Argument Injection in Ghostscript
+  call, potentially leading into RCE
+Resolves: RHEL-295960
+
+* Thu Oct 29 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-35
+- CVE-2026-112398 python-pillow: Pillow: Heap buffer overflow in FlashPix
+  (FPX) JPEG decoding leads to code execution
+Resolves: RHEL-294549
+
+* Thu Oct 29 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-34
+- CVE-2026-112393 python-pillow: Pillow: Heap buffer overflow in _tiffWriteProc when saving TIFF to BytesIO
+Resolves: RHEL-293597
+
 * Thu Oct 22 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 5.1.1-33
 - CVE-2026-112892 python-pillow: pillow: Denial of Service via unbounded
   memory expansion in MSP image decoder
